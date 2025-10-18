@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Healthcare Bot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f8fafc;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+  <!-- Main Container -->
+  <div class="w-full max-w-4xl p-8 bg-white shadow-xl rounded-xl">
+
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-center mb-8">AI Healthcare Bot</h1>
+
+    <!-- STEP 1: USER DETAILS PAGE -->
+    <div id="user-details-page">
+      <h2 class="text-xl font-semibold mb-4 text-center">Enter Your Details</h2>
+      <div class="flex flex-col space-y-4">
+        <input type="text" id="name" placeholder="Full Name" class="p-2 border rounded-md">
+        <input type="number" id="age" placeholder="Age" class="p-2 border rounded-md">
+        <input type="text" id="place" placeholder="Place" class="p-2 border rounded-md">
+        <input type="text" id="mobile" placeholder="Mobile Number" class="p-2 border rounded-md">
+        <button id="register-btn" class="p-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">Continue</button>
+      </div>
+      <p id="register-msg" class="text-center text-sm mt-4 text-gray-600"></p>
+    </div>
+
+    <!-- STEP 2: CHATBOT PAGE -->
+    <div id="chat-page" class="hidden">
+      <div class="flex w-full space-x-6">
+
+        <!-- Left Side: User Input -->
+        <div class="flex flex-col w-1/2">
+          <div class="flex-grow flex flex-col p-4 border border-gray-300 rounded-lg">
+            <h2 class="text-lg font-semibold mb-2">User Input</h2>
+            <textarea id="user-input" class="flex-grow resize-none p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"></textarea>
+            
+            <div class="mt-4 flex items-center space-x-2">
+              <label class="p-2 bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300 transition-colors">
+                <input type="file" id="file-upload" class="hidden" accept=".jpg,.jpeg,.png,.pdf">
+                <span class="text-sm">File Input</span>
+              </label>
+              <button id="send-btn" class="flex-grow p-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Bot Output -->
+        <div class="flex flex-col w-1/2">
+          <div class="flex-grow flex flex-col p-4 border border-gray-300 rounded-lg overflow-y-auto">
+            <h2 class="text-lg font-semibold mb-2">Bot Output</h2>
+            <div id="bot-reply" class="text-gray-700">
+              Bot replies will appear here.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const BASE_URL = 'http://127.0.0.1:5000';
+    const registerBtn = document.getElementById('register-btn');
+    const userDetailsPage = document.getElementById('user-details-page');
+    const chatPage = document.getElementById('chat-page');
+    const registerMsg = document.getElementById('register-msg');
+    const userInput = document.getElementById('user-input');
+    const fileInput = document.getElementById('file-upload');
+    const sendBtn = document.getElementById('send-btn');
+    const botReply = document.getElementById('bot-reply');
+
+    let currentUserMobile = null;
+
+    // STEP 1: Register User
+    registerBtn.addEventListener('click', async () => {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const place = document.getElementById('place').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+
+      if (!name || !age || !place || !mobile) {
+        registerMsg.innerText = "⚠️ Please fill in all details.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${BASE_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, age, place, mobile })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          registerMsg.innerText = "✅ " + result.message;
+          currentUserMobile = mobile;
+
+          // Show chatbot page
+          setTimeout(() => {
+            userDetailsPage.classList.add('hidden');
+            chatPage.classList.remove('hidden');
+          }, 1000);
+        } else {
+          registerMsg.innerText = "❌ " + result.error;
+        }
+
+      } catch (error) {
+        registerMsg.innerText = "❌ Error connecting to server.";
+      }
+    });
+
+    // STEP 2: Chat Function
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      const selectedFile = fileInput.files[0];
+      if (!message && !selectedFile) return;
+
+      botReply.innerHTML = 'Thinking...';
+
+      const formData = new FormData();
+      formData.append('message', message);
+      formData.append('mobile', currentUserMobile);
+      if (selectedFile) formData.append('file', selectedFile);
+
+      try {
+        const response = await fetch(`${BASE_URL}/chat`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.text) {
+          botReply.innerHTML = result.text;
+        } else {
+          botReply.innerHTML = result.error || "Error in response.";
+        }
+
+      } catch (error) {
+        botReply.innerHTML = "❌ Failed to connect to backend.";
+      }
+
+      userInput.value = '';
+      fileInput.value = '';
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
