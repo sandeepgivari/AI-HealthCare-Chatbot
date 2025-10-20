@@ -1,59 +1,59 @@
-# 🏥 AI Healthcare Chatbot
+#  AI Healthcare Chatbot
 
-A simple yet functional **AI-powered Healthcare Chatbot** built using **HTML, CSS, JavaScript**, and a **Flask backend** with **MongoDB** integration.
-
-This project allows users to:
-1. Enter their details (Name, Age, Place, Mobile Number).
-2. Chat with an AI healthcare assistant through a simple two-page interface.
-3. Automatically store user details and chat history in a **MongoDB NoSQL database**.
-4. When the same user visits again, their previous data and chats are updated under the same record.
+##  Project Overview  
+This project is a **AI-powered healthcare chatbot** that allows users to first enter their **personal details** (Name, Age, Place, Mobile Number) and then chat with an AI healthcare assistant.  
+All user data and chat history are stored in **MongoDB**, and returning users have their previous chats updated automatically. The chatbot provides **short, human-like responses** for quick and clear guidance.
 
 ---
 
-## ⚙️ Features
-
-- 🧑‍💻 **Two-step user interface**
-  - Step 1: Collects user details.  
-  - Step 2: Opens chatbot interface for interaction.
-
-- 💬 **AI Chat Integration**
-  - Simple 2–3 line responses.
-  - Handles text and optional file input.
-
-- 🗄️ **MongoDB Integration**
-  - Stores user data and conversation history.
-  - Updates old records for returning users.
-
-- 🌐 **Flask Backend**
-  - Connects front-end with MongoDB.
-  - Handles form data and chat messages.
+##  Business Requirement  
+To create a functional healthcare assistant interface that:  
+1. Collects user details in a structured format.  
+2. Stores and updates user data in a **NoSQL database**.  
+3. Provides AI-based responses to user queries with an easy-to-use interface.  
 
 ---
 
-## 🧠 Tech Stack
-
-| Layer | Technology |
-|-------|-------------|
-| Frontend | HTML, CSS, JavaScript (TailwindCSS) |
-| Backend | Flask (Python) |
-| Database | MongoDB (NoSQL) |
-
+##  Features & Functionality  
+1. **Two-step UI** – Step 1: Collects user information, Step 2: Chat interface.  
+2. **AI Chatbot Responses** – Short, concise answers to user health queries.  
+3. **MongoDB Integration** – Stores user details and chat history, updates existing records for returning users.  
+4. **File Upload Support** – Users can optionally upload files (e.g., reports) for AI analysis.  
 ---
 
-## 🚀 How to Run
+## Tools & Technologies Used
+Frontend: HTML, CSS (Tailwind), JavaScript
+Backend: Python Flask
+Database: MongoDB
+Version Control: Git & GitHub
 
-### **1️⃣ Clone the Repository**
-```bash
-git clone https://github.com/YOUR_USERNAME/healthcare_chatbot.git
-cd healthcare_chatbot
+## How to Run 
 
-###🧑‍⚕️ **About**
+### 1. Clone the Repository  
+-git clone https://github.com/YOUR_USERNAME/healthcare_chatbot.git
+-cd healthcare_chatbot
+  
+### 2. Create and activate a virtual environment  
+- python -m venv venv
+-venv\Scripts\activate
+   
+### 3. Install dependencies  
+- pip install flask pymongo 
 
-This project demonstrates how AI and simple frontend design can combine to create a basic healthcare assistant interface.
-It can be expanded to include:
+### 4. Start MongoDB on your system. 
 
-AI model integration (e.g., OpenAI or Gemini)
+### 5. Run the Flask server
+-python app.py
 
-Better UI/UX animations
+### 6. Open your browser → http://127.0.0.1:5000 
 
-Real medical API support
+## Preview
+
+## Skills Demonstrated
+This project showcases my ability to:
+Build interactive web interfaces combining frontend and backend technologies.
+Integrate AI-driven chatbot functionality with MongoDB data storage.
+Design a dynamic two-page workflow for user information and chat interaction.
+Apply problem-solving and programming skills to healthcare-related applications.
+Author: Givari Sandeep
+ 
